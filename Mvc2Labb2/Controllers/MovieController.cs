@@ -1,8 +1,11 @@
 ﻿
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Mvc2Labb2.Data;
+using Mvc2Labb2.Models;
 using Mvc2Labb2.ViewModels;
 
 namespace Mvc2Labb2.Controllers
@@ -16,17 +19,19 @@ namespace Mvc2Labb2.Controllers
             _movieRepository = movieRepository;
         }
         // GET
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string orderOnProperty, OrderByType orderBy = OrderByType.None)
         {
+            
             var viewModel = new ListMovieViewModel
             {
-                Items = (await _movieRepository.GetAll()).Select(f=>
+                Items = (await _movieRepository.GetAll(orderOnProperty, orderBy)).Select(f=>
                     new ListMovieViewModel.MovieViewModel
                     {
                         FilmId = f.FilmId,
-                        ReleaseYear = f.
-                            ReleaseYear,Title = f.Title
-                    })
+                        ReleaseYear = f.ReleaseYear,
+                        Title = f.Title
+                    }),
+                OrderBy = orderBy
             };
 
             return View(viewModel);

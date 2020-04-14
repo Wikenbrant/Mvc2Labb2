@@ -1,4 +1,5 @@
-﻿@model Mvc2Labb2.ViewModels.ListMovieViewModel
+﻿@using Mvc2Labb2.Data
+@model Mvc2Labb2.ViewModels.ListMovieViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,8 +10,25 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Titel</th>
-            <th>År</th>
+            <th>
+                @Html.ActionLink("Titel", "Index", new { orderOnProperty="Titel",orderBy = Model.OrderBy switch
+                {
+                    OrderByType.None => OrderByType.Asc,
+                    OrderByType.Asc => OrderByType.Desc,
+                    _ => OrderByType.None
+                    }})</th>
+            <th>
+                @Html.ActionLink("År", "Index", new
+                {
+                    sortOnProperty = "ReleaseYear",
+                    orderBy = Model.OrderBy switch
+                    {
+                        OrderByType.None => OrderByType.Asc,
+                        OrderByType.Asc => OrderByType.Desc,
+                        _ => OrderByType.None
+                        }
+                })
+            </th>
         </tr>
     </thead>
     <tbody>
