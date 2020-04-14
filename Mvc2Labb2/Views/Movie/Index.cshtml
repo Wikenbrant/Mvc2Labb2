@@ -11,15 +11,15 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Titel", "Index", new { orderOnProperty="Titel",orderBy = Model.OrderBy switch
+                @Html.ActionLink("Titel", "Index", new { orderOnProperty="Titel",orderBy = Model.OrderByTitle switch
                 {
                     OrderByType.None => OrderByType.Asc,
                     OrderByType.Asc => OrderByType.Desc,
                     _ => OrderByType.None
-                    }})@if (Model.OrderBy == OrderByType.Asc)
+                    }})@if (Model.OrderByTitle == OrderByType.Asc)
                        {
                            <i class="fas fa-sort-up"></i> 
-                       }else if (Model.OrderBy == OrderByType.Desc)
+                       }else if (Model.OrderByTitle == OrderByType.Desc)
                        {
                            <i class="fas fa-sort-down"></i>
                        }</th>
@@ -27,16 +27,16 @@
                 @Html.ActionLink("År", "Index", new
                 {
                     sortOnProperty = "ReleaseYear",
-                    orderBy = Model.OrderBy switch
+                    orderBy = Model.OrderByReleaseYear switch
                     {
                         OrderByType.None => OrderByType.Asc,
                         OrderByType.Asc => OrderByType.Desc,
                         _ => OrderByType.None
                         }
-                })@if (Model.OrderBy == OrderByType.Asc)
+                })@if (Model.OrderByReleaseYear == OrderByType.Asc)
                   {
                       <i class="fas fa-sort-up"></i> 
-                  }else if (Model.OrderBy == OrderByType.Desc)
+                  }else if (Model.OrderByReleaseYear == OrderByType.Desc)
                   {
                       <i class="fas fa-sort-down"></i>
                   }

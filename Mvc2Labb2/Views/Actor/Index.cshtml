@@ -1,0 +1,57 @@
+﻿@using Mvc2Labb2.Data
+@model Mvc2Labb2.ViewModels.ListActorsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Movies</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.ActionLink("Firstname", "Index", new { orderOnProperty="Titel",orderBy = Model.OrderByFirstName switch
+            {
+                OrderByType.None => OrderByType.Asc,
+                OrderByType.Asc => OrderByType.Desc,
+                _ => OrderByType.None
+                }})@if (Model.OrderByFirstName == OrderByType.Asc)
+                   {
+                       <i class="fas fa-sort-up"></i> 
+                   }else if (Model.OrderByFirstName == OrderByType.Desc)
+                   {
+                       <i class="fas fa-sort-down"></i>
+                   }</th>
+        <th>
+            @Html.ActionLink("Lastname", "Index", new
+            {
+                sortOnProperty = "ReleaseYear",
+                orderBy = Model.OrderByLastName switch
+                {
+                    OrderByType.None => OrderByType.Asc,
+                    OrderByType.Asc => OrderByType.Desc,
+                    _ => OrderByType.None
+                    }
+            })@if (Model.OrderByLastName == OrderByType.Asc)
+              {
+                  <i class="fas fa-sort-up"></i> 
+              }else if (Model.OrderByLastName == OrderByType.Desc)
+              {
+                  <i class="fas fa-sort-down"></i>
+              }
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Items) {
+        <tr>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>
+                | @Html.ActionLink("Detail", "Detail", new {id = item.ActorId}) |
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

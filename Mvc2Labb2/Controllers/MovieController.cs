@@ -15,19 +15,21 @@ namespace Mvc2Labb2.Controllers
             _movieRepository = movieRepository;
         }
         // GET
-        public async Task<IActionResult> Index(string orderOnProperty, OrderByType orderBy)
+        public async Task<IActionResult> Index(string orderOnProperty, OrderByType? orderByTitle, OrderByType? orderByReleaseYear)
         {
-            
+            var orderBy = orderByTitle ?? orderByReleaseYear;
             var viewModel = new ListMovieViewModel
             {
-                Items = (await _movieRepository.GetAll(orderOnProperty, orderBy)).Select(f=>
+                Items = (await _movieRepository.GetAllAsync(orderOnProperty, orderBy??OrderByType.None).ConfigureAwait(false)).Select(f=>
                     new ListMovieViewModel.MovieViewModel
                     {
+                        
                         FilmId = f.FilmId,
                         ReleaseYear = f.ReleaseYear,
                         Title = f.Title
                     }),
-                OrderBy = orderBy
+                OrderByTitle = orderByTitle ?? OrderByType.None,
+                OrderByReleaseYear = orderByReleaseYear ?? OrderByType.None
             };
 
             return View(viewModel);
@@ -35,7 +37,7 @@ namespace Mvc2Labb2.Controllers
 
         public async Task<IActionResult> Detail(int id)
         {
-            var film = await _movieRepository.Get(id);
+            var film = await _movieRepository.GetAsync(id).ConfigureAwait(false);
             var viewModel = new MovieDetailViewModel
             {
                 Title = film.Title,

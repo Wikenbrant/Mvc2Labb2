@@ -22,6 +22,7 @@ namespace Mvc2Labb2
         {
             services.AddDbContext<sakilaContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddControllersWithViews();
         }
 
