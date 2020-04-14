@@ -16,7 +16,13 @@
                     OrderByType.None => OrderByType.Asc,
                     OrderByType.Asc => OrderByType.Desc,
                     _ => OrderByType.None
-                    }})</th>
+                    }})@if (Model.OrderBy == OrderByType.Asc)
+                       {
+                           <i class="fas fa-sort-up"></i> 
+                       }else if (Model.OrderBy == OrderByType.Desc)
+                       {
+                           <i class="fas fa-sort-down"></i>
+                       }</th>
             <th>
                 @Html.ActionLink("År", "Index", new
                 {
@@ -27,7 +33,13 @@
                         OrderByType.Asc => OrderByType.Desc,
                         _ => OrderByType.None
                         }
-                })
+                })@if (Model.OrderBy == OrderByType.Asc)
+                  {
+                      <i class="fas fa-sort-up"></i> 
+                  }else if (Model.OrderBy == OrderByType.Desc)
+                  {
+                      <i class="fas fa-sort-down"></i>
+                  }
             </th>
         </tr>
     </thead>
