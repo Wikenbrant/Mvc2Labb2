@@ -1,0 +1,27 @@
+﻿@model Mvc2Labb2.ViewModels.ListMovieViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Movies</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titel</th>
+            <th>År</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Items) {
+    <tr>
+        <td>@item.Title</td>
+        <td>@item.ReleaseYear</td>
+        <td>
+            | @Html.ActionLink("Detail", "Detail", new {id = item.FilmId}) |
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
