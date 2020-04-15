@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mvc2Labb2.Data;
+using Mvc2Labb2.Data.ActorRepository;
+using Mvc2Labb2.Data.FilmRepository;
 
 namespace Mvc2Labb2
 {
@@ -21,8 +24,10 @@ namespace Mvc2Labb2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<sakilaContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("Default")));
-            services.AddScoped<IMovieRepository, MovieRepository>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IFilmRepository, FilmRepository>();
+            services.AddScoped<IActorRepository, ActorRepository>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
         }
 

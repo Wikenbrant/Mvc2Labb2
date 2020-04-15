@@ -11,12 +11,13 @@
     <thead>
     <tr>
         <th>
-            @Html.ActionLink("Firstname", "Index", new { orderOnProperty="Titel",orderBy = Model.OrderByFirstName switch
-            {
-                OrderByType.None => OrderByType.Asc,
-                OrderByType.Asc => OrderByType.Desc,
-                _ => OrderByType.None
-                }})@if (Model.OrderByFirstName == OrderByType.Asc)
+            @Html.ActionLink("FirstName", "Index", new { orderOnProperty= "FirstName",
+                orderByFirstName = Model.OrderByFirstName switch
+           {
+               OrderByType.None => OrderByType.Asc,
+               OrderByType.Asc => OrderByType.Desc,
+               _ => OrderByType.None
+           }})@if (Model.OrderByFirstName == OrderByType.Asc)
                    {
                        <i class="fas fa-sort-up"></i> 
                    }else if (Model.OrderByFirstName == OrderByType.Desc)
@@ -24,16 +25,16 @@
                        <i class="fas fa-sort-down"></i>
                    }</th>
         <th>
-            @Html.ActionLink("Lastname", "Index", new
-            {
-                sortOnProperty = "ReleaseYear",
-                orderBy = Model.OrderByLastName switch
-                {
-                    OrderByType.None => OrderByType.Asc,
-                    OrderByType.Asc => OrderByType.Desc,
-                    _ => OrderByType.None
-                    }
-            })@if (Model.OrderByLastName == OrderByType.Asc)
+            @Html.ActionLink("LastName", "Index", new
+       {
+           sortOnProperty = "LastName",
+           orderByLastName = Model.OrderByLastName switch
+           {
+               OrderByType.None => OrderByType.Asc,
+               OrderByType.Asc => OrderByType.Desc,
+               _ => OrderByType.None
+           }
+       })@if (Model.OrderByLastName == OrderByType.Asc)
               {
                   <i class="fas fa-sort-up"></i> 
               }else if (Model.OrderByLastName == OrderByType.Desc)
@@ -49,7 +50,7 @@
             <td>@item.FirstName</td>
             <td>@item.LastName</td>
             <td>
-                | @Html.ActionLink("Detail", "Detail", new {id = item.ActorId}) |
+                | @Html.ActionLink("Movies","ActorMovies","Movie",new{id=item.ActorId}) |
             </td>
         </tr>
     }

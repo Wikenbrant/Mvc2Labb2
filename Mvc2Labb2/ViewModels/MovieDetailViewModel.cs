@@ -4,6 +4,7 @@ namespace Mvc2Labb2.ViewModels
 {
     public class MovieDetailViewModel
     {
+        public int FilmId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string ReleaseYear { get; set; }

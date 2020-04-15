@@ -11,12 +11,13 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Titel", "Index", new { orderOnProperty="Titel",orderBy = Model.OrderByTitle switch
-                {
-                    OrderByType.None => OrderByType.Asc,
-                    OrderByType.Asc => OrderByType.Desc,
-                    _ => OrderByType.None
-                    }})@if (Model.OrderByTitle == OrderByType.Asc)
+                @Html.ActionLink("Titel", "Index", new { orderOnProperty="Titel",
+               orderByTitle = Model.OrderByTitle switch
+               {
+                   OrderByType.None => OrderByType.Asc,
+                   OrderByType.Asc => OrderByType.Desc,
+                   _ => OrderByType.None
+               }})@if (Model.OrderByTitle == OrderByType.Asc)
                        {
                            <i class="fas fa-sort-up"></i> 
                        }else if (Model.OrderByTitle == OrderByType.Desc)
@@ -25,15 +26,15 @@
                        }</th>
             <th>
                 @Html.ActionLink("År", "Index", new
-                {
-                    sortOnProperty = "ReleaseYear",
-                    orderBy = Model.OrderByReleaseYear switch
-                    {
-                        OrderByType.None => OrderByType.Asc,
-                        OrderByType.Asc => OrderByType.Desc,
-                        _ => OrderByType.None
-                        }
-                })@if (Model.OrderByReleaseYear == OrderByType.Asc)
+           {
+               sortOnProperty = "ReleaseYear",
+               orderByReleaseYear = Model.OrderByReleaseYear switch
+               {
+                   OrderByType.None => OrderByType.Asc,
+                   OrderByType.Asc => OrderByType.Desc,
+                   _ => OrderByType.None
+               }
+           })@if (Model.OrderByReleaseYear == OrderByType.Asc)
                   {
                       <i class="fas fa-sort-up"></i> 
                   }else if (Model.OrderByReleaseYear == OrderByType.Desc)
