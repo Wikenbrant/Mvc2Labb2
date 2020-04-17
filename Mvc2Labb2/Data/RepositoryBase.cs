@@ -18,7 +18,6 @@ namespace Mvc2Labb2.Data
         public IQueryable<T> FindAllOrderBy<TKey>(Expression<Func<T, TKey>> keySelector, OrderByType orderBy) =>
             (orderBy) switch
             {
-                OrderByType.None => FindAll(),
                 OrderByType.Asc => _context.Set<T>().OrderBy(keySelector).AsNoTracking(),
                 OrderByType.Desc => _context.Set<T>().OrderByDescending(keySelector).AsNoTracking(),
                 _ => FindAll()

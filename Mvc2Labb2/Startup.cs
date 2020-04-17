@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mvc2Labb2.Data;
 using Mvc2Labb2.Data.ActorRepository;
+using Mvc2Labb2.Data.Decorators;
 using Mvc2Labb2.Data.FilmRepository;
 
 namespace Mvc2Labb2
@@ -24,10 +25,17 @@ namespace Mvc2Labb2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<sakilaContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("Default")));
+
             services.AddScoped<IFilmRepository, FilmRepository>();
+            services.Decorate<IFilmRepository, CachedFilmRepository>();
+
             services.AddScoped<IActorRepository, ActorRepository>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddMemoryCache();
+
             services.AddControllersWithViews();
         }
 

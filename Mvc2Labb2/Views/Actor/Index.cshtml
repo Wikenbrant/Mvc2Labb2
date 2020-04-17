@@ -1,4 +1,5 @@
 ﻿@using Mvc2Labb2.Data
+@using Mvc2Labb2.ViewModels
 @model Mvc2Labb2.ViewModels.ListActorsViewModel
 
 @{
@@ -11,36 +12,40 @@
     <thead>
     <tr>
         <th>
-            @Html.ActionLink("FirstName", "Index", new { orderOnProperty= "FirstName",
-                orderByFirstName = Model.OrderByFirstName switch
-           {
-               OrderByType.None => OrderByType.Asc,
-               OrderByType.Asc => OrderByType.Desc,
-               _ => OrderByType.None
-           }})@if (Model.OrderByFirstName == OrderByType.Asc)
-                   {
-                       <i class="fas fa-sort-up"></i> 
-                   }else if (Model.OrderByFirstName == OrderByType.Desc)
-                   {
-                       <i class="fas fa-sort-down"></i>
-                   }</th>
+            @Html.OrderByLink(
+                Url,
+                new LinkPartialViewModel
+                {
+                    OrderByViewModel =
+                    {
+                        PropertyName = "FirstName",
+                        OrderBy = Model.OrderByViewModel.OrderBy,
+                        CurrentPropertyName = Model.OrderByViewModel.CurrentPropertyName
+                    },
+                    DisplayName = "FirstName",
+                    Action = "Index",
+                    Controller = "Actor",
+                    PagingViewModel = Model.PagingViewModel
+
+                })
+        </th>
         <th>
-            @Html.ActionLink("LastName", "Index", new
-       {
-           sortOnProperty = "LastName",
-           orderByLastName = Model.OrderByLastName switch
-           {
-               OrderByType.None => OrderByType.Asc,
-               OrderByType.Asc => OrderByType.Desc,
-               _ => OrderByType.None
-           }
-       })@if (Model.OrderByLastName == OrderByType.Asc)
-              {
-                  <i class="fas fa-sort-up"></i> 
-              }else if (Model.OrderByLastName == OrderByType.Desc)
-              {
-                  <i class="fas fa-sort-down"></i>
-              }
+            @Html.OrderByLink(
+                Url,
+                new LinkPartialViewModel
+                {
+                    OrderByViewModel =
+                    {
+                        PropertyName = "LastName",
+                        OrderBy = Model.OrderByViewModel.OrderBy,
+                        CurrentPropertyName = Model.OrderByViewModel.CurrentPropertyName
+                    },
+                    DisplayName = "LastName",
+                    Action = "Index",
+                    Controller = "Actor",
+                    PagingViewModel = Model.PagingViewModel
+
+                })
         </th>
     </tr>
     </thead>
@@ -56,3 +61,13 @@
     }
     </tbody>
 </table>
+<partial 
+    name="_Pagination" 
+    model="@(new LinkPartialViewModel
+           {
+               Controller = "Actor",
+               Action = "Index",
+               OrderByViewModel = Model.OrderByViewModel,
+               PagingViewModel = Model.PagingViewModel
+           })"
+    />

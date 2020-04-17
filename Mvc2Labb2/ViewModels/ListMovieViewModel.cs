@@ -6,8 +6,8 @@ namespace Mvc2Labb2.ViewModels
     public class ListMovieViewModel
     {
         public IEnumerable<MovieViewModel> Items { get; set; }
-        public OrderByType OrderByTitle { get; set; }
-        public OrderByType OrderByReleaseYear { get; set; }
+        public OrderByViewModel OrderByViewModel { get; set; } = new OrderByViewModel();
+        public PagingViewModel PagingViewModel { get; set; } = new PagingViewModel();
         public class MovieViewModel
         {
             public int FilmId { get; set; }

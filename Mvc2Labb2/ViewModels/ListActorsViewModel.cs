@@ -10,8 +10,8 @@ namespace Mvc2Labb2.ViewModels
     {
         
         public IEnumerable<ActorViewModel> Items { get; set; }
-        public OrderByType OrderByFirstName { get; set; }
-        public OrderByType OrderByLastName { get; set; }
+        public OrderByViewModel OrderByViewModel { get; set; } = new OrderByViewModel();
+        public PagingViewModel PagingViewModel { get; set; } = new PagingViewModel();
         public class ActorViewModel
         {
             public int ActorId { get; set; }

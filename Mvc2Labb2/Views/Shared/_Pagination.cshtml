@@ -1,0 +1,114 @@
+﻿@using Mvc2Labb2.ViewModels
+@model Mvc2Labb2.ViewModels.LinkPartialViewModel
+<nav>
+    <ul class="pagination">
+        <li class="page-item @(Model.PagingViewModel.CurrentPage < 2 ? "disabled" : "")">
+            @Html.PaginationLink(Url, new LinkPartialViewModel
+            {
+                Action = Model.Action,
+                Controller = Model.Controller,
+                DisplayName = "Previous",
+                OrderByViewModel = Model.OrderByViewModel,
+                PagingViewModel =
+                {
+                    CurrentPage = Model.PagingViewModel.CurrentPage,
+                    LastPage = Model.PagingViewModel.LastPage,
+                    NextPage = 1,
+                    PageSize = Model.PagingViewModel.PageSize
+                }
+            })
+        </li>
+        @for (var i = 1; i <= Model.PagingViewModel.LastPage; i++)
+        {
+    <li class="page-item @(Model.PagingViewModel.CurrentPage == i ? "active" : "")">
+        @if (Model.PagingViewModel.CurrentPage == i)
+        {
+            <a class="page-link">@i</a>
+        }
+        else
+        {
+            @Html.PaginationLink(Url, new LinkPartialViewModel
+            {
+                Action = Model.Action,
+                Controller = Model.Controller,
+                DisplayName = i.ToString(),
+                OrderByViewModel = Model.OrderByViewModel,
+                PagingViewModel =
+                {
+                    CurrentPage = Model.PagingViewModel.CurrentPage,
+                    LastPage = Model.PagingViewModel.LastPage,
+                    NextPage = i,
+                    PageSize = Model.PagingViewModel.PageSize
+                }
+            })
+        }
+        
+    </li>
+        }
+        <li class="page-item @(Model.PagingViewModel.CurrentPage == Model.PagingViewModel.LastPage ? "disabled" : "")">
+            @Html.PaginationLink(Url,new LinkPartialViewModel
+            {
+                Action = Model.Action,
+                Controller = Model.Controller,
+                DisplayName = "Next",
+                OrderByViewModel = Model.OrderByViewModel,
+                PagingViewModel =
+                {
+                    CurrentPage = Model.PagingViewModel.CurrentPage,
+                    LastPage = Model.PagingViewModel.LastPage,
+                    NextPage = Model.PagingViewModel.CurrentPage + 1,
+                    PageSize = Model.PagingViewModel.PageSize
+                }
+            })
+        </li>
+        <li class="page-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @Model.PagingViewModel.PageSize
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                @Html.PageSizeLink(Url, new LinkPartialViewModel
+                {
+                    Action = Model.Action,
+                    Controller = Model.Controller,
+                    DisplayName = "50",
+                    OrderByViewModel = Model.OrderByViewModel,
+                    PagingViewModel =
+                    {
+                        CurrentPage = Model.PagingViewModel.CurrentPage,
+                        LastPage = Model.PagingViewModel.LastPage,
+                        NextPage = 1,
+                        PageSize = 50
+                    }
+                })
+                @Html.PageSizeLink(Url, new LinkPartialViewModel
+                {
+                    Action = Model.Action,
+                    Controller = Model.Controller,
+                    DisplayName = "100",
+                    OrderByViewModel = Model.OrderByViewModel,
+                    PagingViewModel =
+                    {
+                        CurrentPage = Model.PagingViewModel.CurrentPage,
+                        LastPage = Model.PagingViewModel.LastPage,
+                        NextPage = 1,
+                        PageSize = 100
+                    }
+                })
+                @Html.PageSizeLink(Url, new LinkPartialViewModel
+                {
+                    Action = Model.Action,
+                    Controller = Model.Controller,
+                    DisplayName = "150",
+                    OrderByViewModel = Model.OrderByViewModel,
+                    PagingViewModel =
+                    {
+                        CurrentPage = Model.PagingViewModel.CurrentPage,
+                        LastPage = Model.PagingViewModel.LastPage,
+                        NextPage = 1,
+                        PageSize = 150
+                    }
+                })
+            </div>
+        </li>
+</ul>
+</nav>

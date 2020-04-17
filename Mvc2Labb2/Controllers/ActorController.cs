@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mvc2Labb2.Data;
+using Mvc2Labb2.Data.Paging;
 using Mvc2Labb2.ViewModels;
 
 namespace Mvc2Labb2.Controllers
@@ -17,15 +19,24 @@ namespace Mvc2Labb2.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<IActionResult> Index(string orderOnProperty, OrderByType orderByFirstName, OrderByType orderByLastName)
+        public async Task<IActionResult> Index(string propertyName, OrderByType orderBy, int currentPage = 1,int pageSize=25)
         {
-            var orderBy = orderByFirstName == OrderByType.None ? orderByLastName : orderByFirstName;
-            var actors = await _repository.Actor.GetAllActorsOrderByAsync(orderOnProperty, orderBy).ConfigureAwait(false);
-            var viewModel = new ListActorsViewModel
+
+            var actors = await _repository.Actor.GetAllActorsOrderByAsync(propertyName, orderBy).GetPaged(currentPage, pageSize).ConfigureAwait(false);
+            var viewModel = new ListActorsViewModel()
             {
-                Items = _mapper.Map<IEnumerable<ListActorsViewModel.ActorViewModel>>(actors),
-                OrderByFirstName = orderByFirstName ,
-                OrderByLastName = orderByLastName 
+                Items = _mapper.Map<IEnumerable<ListActorsViewModel.ActorViewModel>>(actors.Results),
+                OrderByViewModel =
+                {
+                    CurrentPropertyName = propertyName,
+                    OrderBy = orderBy
+                },
+                PagingViewModel =
+                {
+                    CurrentPage = currentPage,
+                    PageSize = pageSize ,
+                    LastPage = actors.PageCount
+                }
             };
 
             return View(viewModel);
@@ -33,12 +44,10 @@ namespace Mvc2Labb2.Controllers
 
         public async Task<IActionResult> MovieActors(int id)
         {
-            var actors = await _repository.Actor.GetActorsByFilmIdAsync(id).ConfigureAwait(false);
+            var actors = await _repository.Actor.GetActorsByFilmIdAsync(id).ToListAsync().ConfigureAwait(false);
             var viewModel = new ListActorsViewModel
             {
-                Items = _mapper.Map<IEnumerable<ListActorsViewModel.ActorViewModel>>(actors),
-                OrderByFirstName = OrderByType.Asc,
-                OrderByLastName = OrderByType.None
+                Items = _mapper.Map<IEnumerable<ListActorsViewModel.ActorViewModel>>(actors)
             };
             return View("Index", viewModel);
         }

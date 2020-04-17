@@ -1,4 +1,5 @@
 ﻿@using Mvc2Labb2.Data
+@using Mvc2Labb2.ViewModels
 @model Mvc2Labb2.ViewModels.ListMovieViewModel
 
 @{
@@ -11,36 +12,40 @@
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Titel", "Index", new { orderOnProperty="Titel",
-               orderByTitle = Model.OrderByTitle switch
-               {
-                   OrderByType.None => OrderByType.Asc,
-                   OrderByType.Asc => OrderByType.Desc,
-                   _ => OrderByType.None
-               }})@if (Model.OrderByTitle == OrderByType.Asc)
-                       {
-                           <i class="fas fa-sort-up"></i> 
-                       }else if (Model.OrderByTitle == OrderByType.Desc)
-                       {
-                           <i class="fas fa-sort-down"></i>
-                       }</th>
+                
+                @Html.OrderByLink(
+                    Url,
+                    new LinkPartialViewModel{
+                        OrderByViewModel = 
+                        {
+                            PropertyName = "Titel",
+                            OrderBy = Model.OrderByViewModel.OrderBy,
+                            CurrentPropertyName = Model.OrderByViewModel.CurrentPropertyName
+                        },
+                        DisplayName = "Titel",
+                        Action = "Index",
+                        Controller = "Movie",
+                        PagingViewModel = Model.PagingViewModel
+
+                    })
+            </th>
             <th>
-                @Html.ActionLink("År", "Index", new
-           {
-               sortOnProperty = "ReleaseYear",
-               orderByReleaseYear = Model.OrderByReleaseYear switch
-               {
-                   OrderByType.None => OrderByType.Asc,
-                   OrderByType.Asc => OrderByType.Desc,
-                   _ => OrderByType.None
-               }
-           })@if (Model.OrderByReleaseYear == OrderByType.Asc)
-                  {
-                      <i class="fas fa-sort-up"></i> 
-                  }else if (Model.OrderByReleaseYear == OrderByType.Desc)
-                  {
-                      <i class="fas fa-sort-down"></i>
-                  }
+                @Html.OrderByLink(
+                    Url,
+                    new LinkPartialViewModel
+                         {
+                        OrderByViewModel =
+                        {
+                            PropertyName = "ReleaseYear",
+                            OrderBy = Model.OrderByViewModel.OrderBy,
+                            CurrentPropertyName = Model.OrderByViewModel.CurrentPropertyName
+                        },
+                        DisplayName = "ReleaseYear",
+                        Action = "Index",
+                        Controller = "Movie",
+                        PagingViewModel = Model.PagingViewModel
+
+                    })
             </th>
         </tr>
     </thead>
@@ -56,3 +61,13 @@
 }
     </tbody>
 </table>
+<partial 
+    name="_Pagination" 
+    model="@(new LinkPartialViewModel
+           {
+               Controller = "Movie",
+               Action = "Index",
+               OrderByViewModel = Model.OrderByViewModel,
+               PagingViewModel = Model.PagingViewModel
+           })"
+/>

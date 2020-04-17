@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mvc2Labb2.Data;
+using Mvc2Labb2.Data.Paging;
 using Mvc2Labb2.ViewModels;
 
 namespace Mvc2Labb2.Controllers
@@ -18,15 +20,23 @@ namespace Mvc2Labb2.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index(string orderOnProperty, OrderByType orderByTitle, OrderByType orderByReleaseYear)
+        public async Task<IActionResult> Index(string propertyName, OrderByType orderBy, int currentPage = 1, int pageSize = 50)
         {
-            var orderBy = orderByTitle == OrderByType.None ? orderByReleaseYear : orderByTitle;
-            var movies = await _repository.Film.GetAllFilmsOrderByAsync(orderOnProperty, orderBy).ConfigureAwait(false);
+            var movies = await _repository.Film.GetAllFilmsOrderByAsync(propertyName, orderBy).GetPaged(currentPage,pageSize).ConfigureAwait(false);
             var viewModel = new ListMovieViewModel
             {
-                Items = _mapper.Map<IEnumerable<ListMovieViewModel.MovieViewModel>>(movies),
-                OrderByTitle = orderByTitle ,
-                OrderByReleaseYear = orderByReleaseYear
+                Items = _mapper.Map<IEnumerable<ListMovieViewModel.MovieViewModel>>(movies.Results),
+                OrderByViewModel =
+                {
+                    CurrentPropertyName = propertyName,
+                    OrderBy = orderBy
+                },
+                PagingViewModel =
+                {
+                    CurrentPage = currentPage, 
+                    PageSize = pageSize ,
+                    LastPage = movies.PageCount
+                }
             };
 
             return View(viewModel);
@@ -40,12 +50,10 @@ namespace Mvc2Labb2.Controllers
         }
         public async Task<IActionResult> ActorMovies(int id)
         {
-            var movies = await _repository.Film.GetFilmsByActorIdAsync(id).ConfigureAwait(false);
+            var movies = await _repository.Film.GetFilmsByActorIdAsync(id).ToListAsync().ConfigureAwait(false);
             var viewModel = new ListMovieViewModel
             {
-                Items = _mapper.Map<IEnumerable<ListMovieViewModel.MovieViewModel>>(movies),
-                OrderByTitle = OrderByType.Asc,
-                OrderByReleaseYear = OrderByType.None
+                Items = _mapper.Map<IEnumerable<ListMovieViewModel.MovieViewModel>>(movies)
             };
             return View("Index",viewModel);
         }

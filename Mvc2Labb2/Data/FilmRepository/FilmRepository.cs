@@ -10,19 +10,18 @@ namespace Mvc2Labb2.Data.FilmRepository
     {
         public FilmRepository(sakilaContext context) : base(context){}
 
-        public async Task<IEnumerable<Film>> GetAllFilmsAsync() => await FindAll().ToListAsync().ConfigureAwait(false);
+        public  IQueryable<Film> GetAllFilmsAsync() =>  FindAll();
 
-        public async Task<IEnumerable<Film>> GetAllFilmsOrderByAsync(string orderOnProperty,
-            OrderByType orderBy = OrderByType.None) => orderOnProperty switch
+        public  IQueryable<Film> GetAllFilmsOrderByAsync(string orderOnProperty,
+            OrderByType orderBy) => orderOnProperty switch
         {
-            "Titel" => await FindAllOrderBy(film => film.Title, orderBy).ToListAsync().ConfigureAwait(false),
-            "ReleaseYear" => await FindAllOrderBy(film => film.ReleaseYear, orderBy).ToListAsync()
-                .ConfigureAwait(false),
-            _ => await GetAllFilmsAsync().ConfigureAwait(false)
+            "Titel" =>  FindAllOrderBy(film => film.Title, orderBy),
+            "ReleaseYear" =>  FindAllOrderBy(film => film.ReleaseYear, orderBy),
+            _ => GetAllFilmsAsync()
         };
-        public async Task<IEnumerable<Film>> GetFilmsByActorIdAsync(int actorId) =>
-            await FindByCondition(film => film.FilmActor.Any(fa => fa.ActorId == actorId)).ToListAsync()
-                .ConfigureAwait(false);
+
+        public IQueryable<Film> GetFilmsByActorIdAsync(int actorId) =>
+            FindByCondition(film => film.FilmActor.Any(fa => fa.ActorId == actorId));
 
         public Task<Film> GetFilmByIdAsync(int filmId) =>
             FindByCondition(film => film.FilmId == filmId).FirstOrDefaultAsync();
