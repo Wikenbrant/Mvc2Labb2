@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mvc2Labb2.Models
 {
     [Table("city")]
-    public partial class City
+    public sealed partial class City
     {
         public City()
         {
@@ -27,8 +27,8 @@ namespace Mvc2Labb2.Models
 
         [ForeignKey(nameof(CountryId))]
         [InverseProperty("City")]
-        public virtual Country Country { get; set; }
+        public Country Country { get; set; }
         [InverseProperty("City")]
-        public virtual ICollection<Address> Address { get; set; }
+        public ICollection<Address> Address { get; set; }
     }
 }

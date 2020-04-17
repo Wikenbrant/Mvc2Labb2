@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mvc2Labb2.Data.ActorRepository;
 using Mvc2Labb2.Data.FilmRepository;
 

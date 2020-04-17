@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mvc2Labb2.Models
 {
     [Table("inventory")]
-    public partial class Inventory
+    public sealed partial class Inventory
     {
         public Inventory()
         {
@@ -25,11 +25,11 @@ namespace Mvc2Labb2.Models
 
         [ForeignKey(nameof(FilmId))]
         [InverseProperty("Inventory")]
-        public virtual Film Film { get; set; }
+        public Film Film { get; set; }
         [ForeignKey(nameof(StoreId))]
         [InverseProperty("Inventory")]
-        public virtual Store Store { get; set; }
+        public Store Store { get; set; }
         [InverseProperty("Inventory")]
-        public virtual ICollection<Rental> Rental { get; set; }
+        public ICollection<Rental> Rental { get; set; }
     }
 }

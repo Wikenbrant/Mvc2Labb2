@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Mvc2Labb2.Data.Paging;
 using Mvc2Labb2.Models;
+using Mvc2Labb2.Models.Enums;
 
 namespace Mvc2Labb2.Data.FilmRepository
 {
@@ -10,18 +12,29 @@ namespace Mvc2Labb2.Data.FilmRepository
     {
         public FilmRepository(sakilaContext context) : base(context){}
 
-        public  IQueryable<Film> GetAllFilmsAsync() =>  FindAll();
+        public async Task<IEnumerable<Film>> GetAllFilmsAsync() => await FindAll().ToListAsync().ConfigureAwait(false);
 
-        public  IQueryable<Film> GetAllFilmsOrderByAsync(string orderOnProperty,
+        public async Task<IEnumerable<Film>> GetAllFilmsOrderByAsync(string orderOnProperty,
             OrderByType orderBy) => orderOnProperty switch
         {
             "Titel" =>  FindAllOrderBy(film => film.Title, orderBy),
             "ReleaseYear" =>  FindAllOrderBy(film => film.ReleaseYear, orderBy),
-            _ => GetAllFilmsAsync()
+            _ => await GetAllFilmsAsync().ConfigureAwait(false)
         };
 
-        public IQueryable<Film> GetFilmsByActorIdAsync(int actorId) =>
-            FindByCondition(film => film.FilmActor.Any(fa => fa.ActorId == actorId));
+        public Task<PagedResult<Film>> GetAllFilmsPagedAsync(int currentPage, int pageSize) =>
+            FindAllPagedAsync(currentPage, pageSize);
+
+        public Task<PagedResult<Film>> GetAllFilmsOrderByPagedAsync(string orderOnProperty, OrderByType orderBy,
+            int currentPage, int pageSize) => orderOnProperty switch
+        {
+            "Titel" => FindAllOrderByPagedAsync(film => film.Title, orderBy, currentPage, pageSize),
+            "ReleaseYear" => FindAllOrderByPagedAsync(film => film.ReleaseYear, orderBy, currentPage, pageSize),
+            _ => GetAllFilmsPagedAsync(currentPage, pageSize)
+        };
+
+        public async Task<IEnumerable<Film>> GetFilmsByActorIdAsync(int actorId) =>
+           await FindByCondition(film => film.FilmActor.Any(fa => fa.ActorId == actorId)).ToListAsync().ConfigureAwait(false);
 
         public Task<Film> GetFilmByIdAsync(int filmId) =>
             FindByCondition(film => film.FilmId == filmId).FirstOrDefaultAsync();

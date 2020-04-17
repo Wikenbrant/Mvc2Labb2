@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mvc2Labb2.Models
 {
     [Table("film")]
-    public partial class Film
+    public sealed partial class Film
     {
         public Film()
         {
@@ -50,15 +50,15 @@ namespace Mvc2Labb2.Models
 
         [ForeignKey(nameof(LanguageId))]
         [InverseProperty("FilmLanguage")]
-        public virtual Language Language { get; set; }
+        public Language Language { get; set; }
         [ForeignKey(nameof(OriginalLanguageId))]
         [InverseProperty("FilmOriginalLanguage")]
-        public virtual Language OriginalLanguage { get; set; }
+        public Language OriginalLanguage { get; set; }
         [InverseProperty("Film")]
-        public virtual ICollection<FilmActor> FilmActor { get; set; }
+        public ICollection<FilmActor> FilmActor { get; set; }
         [InverseProperty("Film")]
-        public virtual ICollection<FilmCategory> FilmCategory { get; set; }
+        public ICollection<FilmCategory> FilmCategory { get; set; }
         [InverseProperty("Film")]
-        public virtual ICollection<Inventory> Inventory { get; set; }
+        public ICollection<Inventory> Inventory { get; set; }
     }
 }

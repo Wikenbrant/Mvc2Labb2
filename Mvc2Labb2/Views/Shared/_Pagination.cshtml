@@ -20,30 +20,30 @@
         </li>
         @for (var i = 1; i <= Model.PagingViewModel.LastPage; i++)
         {
-    <li class="page-item @(Model.PagingViewModel.CurrentPage == i ? "active" : "")">
-        @if (Model.PagingViewModel.CurrentPage == i)
-        {
-            <a class="page-link">@i</a>
-        }
-        else
-        {
-            @Html.PaginationLink(Url, new LinkPartialViewModel
-            {
-                Action = Model.Action,
-                Controller = Model.Controller,
-                DisplayName = i.ToString(),
-                OrderByViewModel = Model.OrderByViewModel,
-                PagingViewModel =
+            <li class="page-item @(Model.PagingViewModel.CurrentPage == i ? "active" : "")">
+                @if (Model.PagingViewModel.CurrentPage == i)
                 {
-                    CurrentPage = Model.PagingViewModel.CurrentPage,
-                    LastPage = Model.PagingViewModel.LastPage,
-                    NextPage = i,
-                    PageSize = Model.PagingViewModel.PageSize
+                    <a class="page-link">@i</a>
                 }
-            })
-        }
-        
-    </li>
+                else
+                {
+                    @Html.PaginationLink(Url, new LinkPartialViewModel
+                    {
+                        Action = Model.Action,
+                        Controller = Model.Controller,
+                        DisplayName = i.ToString(),
+                        OrderByViewModel = Model.OrderByViewModel,
+                        PagingViewModel =
+                        {
+                            CurrentPage = Model.PagingViewModel.CurrentPage,
+                            LastPage = Model.PagingViewModel.LastPage,
+                            NextPage = i,
+                            PageSize = Model.PagingViewModel.PageSize
+                        }
+                    })
+                }
+                
+            </li>
         }
         <li class="page-item @(Model.PagingViewModel.CurrentPage == Model.PagingViewModel.LastPage ? "disabled" : "")">
             @Html.PaginationLink(Url,new LinkPartialViewModel

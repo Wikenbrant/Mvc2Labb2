@@ -8,7 +8,7 @@ namespace Mvc2Labb2.Data.Paging
 {
     public static class PagingExtension
     {
-        public static async Task<PagedResult<T>> GetPaged<T>(this IQueryable<T> query,
+        public static async Task<PagedResult<T>> GetPagedAsync<T>(this IQueryable<T> query,
             int page, int pageSize) where T : class
         {
             var result = new PagedResult<T> {CurrentPage = page, PageSize = pageSize, RowCount = query.Count()};

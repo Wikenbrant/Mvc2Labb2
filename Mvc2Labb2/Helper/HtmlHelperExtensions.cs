@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Mvc2Labb2.Data;
+using Mvc2Labb2.Models.Enums;
 using Mvc2Labb2.ViewModels;
 
 namespace Mvc2Labb2.Helper

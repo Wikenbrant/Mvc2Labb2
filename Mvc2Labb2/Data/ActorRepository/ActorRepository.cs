@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Mvc2Labb2.Models;
+using Mvc2Labb2.Models.Enums;
 
 namespace Mvc2Labb2.Data.ActorRepository
 {

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mvc2Labb2.Models
 {
     [Table("actor")]
-    public partial class Actor
+    public sealed partial class Actor
     {
         public Actor()
         {
@@ -28,6 +28,6 @@ namespace Mvc2Labb2.Models
         public DateTime LastUpdate { get; set; }
 
         [InverseProperty("Actor")]
-        public virtual ICollection<FilmActor> FilmActor { get; set; }
+        public ICollection<FilmActor> FilmActor { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mvc2Labb2.Models
 {
     [Table("language")]
-    public partial class Language
+    public sealed partial class Language
     {
         public Language()
         {
@@ -25,8 +25,8 @@ namespace Mvc2Labb2.Models
         public DateTime LastUpdate { get; set; }
 
         [InverseProperty(nameof(Film.Language))]
-        public virtual ICollection<Film> FilmLanguage { get; set; }
+        public ICollection<Film> FilmLanguage { get; set; }
         [InverseProperty(nameof(Film.OriginalLanguage))]
-        public virtual ICollection<Film> FilmOriginalLanguage { get; set; }
+        public ICollection<Film> FilmOriginalLanguage { get; set; }
     }
 }

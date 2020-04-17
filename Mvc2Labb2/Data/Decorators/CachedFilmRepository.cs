@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Mvc2Labb2.Data.FilmRepository;
+using Mvc2Labb2.Data.Paging;
 using Mvc2Labb2.Models;
+using Mvc2Labb2.Models.Enums;
 
 namespace Mvc2Labb2.Data.Decorators
 {
@@ -26,6 +27,7 @@ namespace Mvc2Labb2.Data.Decorators
         public IQueryable<Film> FindAll()
         {
             var key = $"{nameof(Film)} - {nameof(FindAll)}";
+
             if (_cache.TryGetValue<IQueryable<Film>>(key, out var value)) return value;
 
             var result = _inner.FindAll();
@@ -41,32 +43,75 @@ namespace Mvc2Labb2.Data.Decorators
         public IQueryable<Film> FindAllOrderBy<TKey>(Expression<Func<Film, TKey>> keySelector, OrderByType orderBy) =>
             _inner.FindAllOrderBy(keySelector, orderBy);
 
+        public Task<PagedResult<Film>> FindAllPagedAsync(int currentPage, int pageSize) =>
+            _inner.FindAllPagedAsync(currentPage,pageSize);
+
+        public Task<PagedResult<Film>> FindAllOrderByPagedAsync<TKey>(Expression<Func<Film, TKey>> keySelector, OrderByType orderBy, int currentPage, int pageSize) =>
+            _inner.FindAllOrderByPagedAsync(keySelector,orderBy,currentPage,pageSize);
+
         public void Create(Film entity) => _inner.Create(entity);
 
         public void Update(Film entity) => _inner.Update(entity);
 
         public void Delete(Film entity) => _inner.Delete(entity);
 
-        public IQueryable<Film> GetAllFilmsAsync()
+        public async Task<IEnumerable<Film>> GetAllFilmsAsync()
         {
             var key = $"{nameof(Film)} - {nameof(GetAllFilmsAsync)}";
-            if (_cache.TryGetValue<IQueryable<Film>>(key, out var value)) return value;
 
-            var result = _inner.GetAllFilmsAsync();
+            if (_cache.TryGetValue<IEnumerable<Film>>(key, out var value)) return value;
+
+            var result = (await _inner.GetAllFilmsAsync().ConfigureAwait(false)).ToList();
 
             _cache.Set(key, result, CacheEntryOptions);
             return result;
         }
 
-        public IQueryable<Film> GetAllFilmsOrderByAsync(string orderOnProperty, OrderByType orderBy) =>
-            _inner.GetAllFilmsOrderByAsync(orderOnProperty, orderBy);
+        public async Task<IEnumerable<Film>> GetAllFilmsOrderByAsync(string orderOnProperty, OrderByType orderBy)
+        {
+            var key = $"{nameof(Film)} - {nameof(GetFilmsByActorIdAsync)} - {orderOnProperty} - {orderBy}";
 
-        public IQueryable<Film> GetFilmsByActorIdAsync(int actorId)
+            if (_cache.TryGetValue<IEnumerable<Film>>(key, out var value)) return value;
+
+            var result = (await _inner.GetAllFilmsOrderByAsync(orderOnProperty, orderBy).ConfigureAwait(false))
+                .ToList();
+
+            _cache.Set(key, result, CacheEntryOptions);
+            return result;
+        }
+
+        public async Task<PagedResult<Film>> GetAllFilmsPagedAsync(int currentPage, int pageSize)
+        {
+            var key = $"{nameof(Film)} - {nameof(GetFilmsByActorIdAsync)} - {currentPage} - {pageSize}";
+
+            if (_cache.TryGetValue<PagedResult<Film>>(key, out var value)) return value;
+
+            var result = await _inner.GetAllFilmsPagedAsync(currentPage, pageSize).ConfigureAwait(false);
+
+            _cache.Set(key, result, CacheEntryOptions);
+            return result;
+        }
+
+        public async Task<PagedResult<Film>> GetAllFilmsOrderByPagedAsync(string orderOnProperty, OrderByType orderBy, int currentPage, int pageSize)
+        {
+            var key = $"{nameof(Film)} - {nameof(GetFilmsByActorIdAsync)} - {orderOnProperty} - {orderBy} - {currentPage} - {pageSize}";
+
+            if (_cache.TryGetValue<PagedResult<Film>>(key, out var value)) return value;
+
+            var result = await _inner.GetAllFilmsOrderByPagedAsync(orderOnProperty, orderBy,currentPage, pageSize).ConfigureAwait(false);
+
+            _cache.Set(key, result, CacheEntryOptions);
+            return result;
+        }
+
+        public async Task<IEnumerable<Film>> GetFilmsByActorIdAsync(int actorId)
         {
             var key = $"{nameof(Film)} - {nameof(GetFilmsByActorIdAsync)} - {actorId}";
-            if (_cache.TryGetValue<IQueryable<Film>>(key, out var value)) return value;
 
-            var result = _inner.GetFilmsByActorIdAsync(actorId);
+            if (_cache.TryGetValue<IEnumerable<Film>>(key, out var value)) return value;
+
+            var result = (await _inner.GetFilmsByActorIdAsync(actorId).ConfigureAwait(false))
+                .ToList();
 
             _cache.Set(key, result, CacheEntryOptions);
             return result;

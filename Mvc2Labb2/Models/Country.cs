@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mvc2Labb2.Models
 {
     [Table("country")]
-    public partial class Country
+    public sealed partial class Country
     {
         public Country()
         {
@@ -24,6 +24,6 @@ namespace Mvc2Labb2.Models
         public DateTime? LastUpdate { get; set; }
 
         [InverseProperty("Country")]
-        public virtual ICollection<City> City { get; set; }
+        public ICollection<City> City { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mvc2Labb2.Data;
 using Mvc2Labb2.Data.Paging;
+using Mvc2Labb2.Models.Enums;
 using Mvc2Labb2.ViewModels;
 
 namespace Mvc2Labb2.Controllers
@@ -22,7 +23,7 @@ namespace Mvc2Labb2.Controllers
 
         public async Task<IActionResult> Index(string propertyName, OrderByType orderBy, int currentPage = 1, int pageSize = 50)
         {
-            var movies = await _repository.Film.GetAllFilmsOrderByAsync(propertyName, orderBy).GetPaged(currentPage,pageSize).ConfigureAwait(false);
+            var movies = await _repository.Film.GetAllFilmsOrderByPagedAsync(propertyName, orderBy, currentPage, pageSize).ConfigureAwait(false);
             var viewModel = new ListMovieViewModel
             {
                 Items = _mapper.Map<IEnumerable<ListMovieViewModel.MovieViewModel>>(movies.Results),
@@ -50,7 +51,7 @@ namespace Mvc2Labb2.Controllers
         }
         public async Task<IActionResult> ActorMovies(int id)
         {
-            var movies = await _repository.Film.GetFilmsByActorIdAsync(id).ToListAsync().ConfigureAwait(false);
+            var movies = await _repository.Film.GetFilmsByActorIdAsync(id).ConfigureAwait(false);
             var viewModel = new ListMovieViewModel
             {
                 Items = _mapper.Map<IEnumerable<ListMovieViewModel.MovieViewModel>>(movies)
