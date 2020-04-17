@@ -24,18 +24,8 @@ namespace Mvc2Labb2.Data.Decorators
             _inner = inner;
             _cache = cache;
         }
-        public IQueryable<Film> FindAll()
-        {
-            var key = $"{nameof(Film)} - {nameof(FindAll)}";
 
-            if (_cache.TryGetValue<IQueryable<Film>>(key, out var value)) return value;
-
-            var result = _inner.FindAll();
-
-            _cache.Set(key, result, CacheEntryOptions);
-            return result;
-
-        }
+        public IQueryable<Film> FindAll() => _inner.FindAll();
 
         public IQueryable<Film> FindByCondition(Expression<Func<Film, bool>> expression) =>
             _inner.FindByCondition(expression);
